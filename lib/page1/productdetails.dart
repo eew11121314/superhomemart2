@@ -17,6 +17,10 @@ class ProductDetails extends StatefulWidget {
   final String photo_4;
   final String photo_5;
   final String photo_6;
+  final double sh_weight;
+  final double sh_length;
+  final double sh_width;
+  final double sh_height;
 
   const ProductDetails({
     super.key,
@@ -33,6 +37,10 @@ class ProductDetails extends StatefulWidget {
     required this.photo_4,
     required this.photo_5,
     required this.photo_6,
+    required this.sh_weight, // เพิ่มข้อมูล sh_weight
+    required this.sh_length, // เพิ่มข้อมูล sh_length
+    required this.sh_width, // เพิ่มข้อมูล sh_width
+    required this.sh_height, // เพิ่มข้อมูล sh_height
   });
 
   @override
@@ -41,6 +49,8 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   bool _isDetailsVisible = false; // ตัวแปรเพื่อจัดการสถานะการแสดงรายละเอียด
+  bool _isSpecificationsVisible =
+      false; // ตัวแปรเพื่อจัดการสถานะการแสดงขนาดสินค้า
 
   void showExpandedImage(BuildContext context, String imageUrl) {
     Navigator.push(
@@ -120,7 +130,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '${widget.price}฿',
+                  '${widget.price} ฿',
                   style: const TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -133,7 +143,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   onTap: () {
                     setState(() {
                       _isDetailsVisible =
-                          !_isDetailsVisible; // สลับสถานะการแสดง
+                          !_isDetailsVisible; // สลับสถานะการแสดงรายละเอียด
                     });
                   },
                   child: Container(
@@ -171,27 +181,62 @@ class _ProductDetailsState extends State<ProductDetails> {
                 const SizedBox(height: 16), // เพิ่มระยะห่างระหว่างปุ่ม
 
                 // ปุ่มแสดงข้อจำเพาะ
-                Container(
-                  width: 200.0, // กำหนดความกว้างเฉพาะ
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // ฟังก์ชันสำหรับแสดงข้อจำเพาะ
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          const Color.fromARGB(255, 78, 84, 94), // สีพื้นหลัง
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 16), // ขนาดปุ่ม
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8), // มุมโค้ง
-                      ),
-                    ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isSpecificationsVisible =
+                          !_isSpecificationsVisible; // สลับสถานะการแสดงขนาดสินค้า
+                    });
+                  },
+                  child: Container(
+                    width: double.infinity, // ทำให้กว้างเต็มที่
+                    padding: EdgeInsets.all(10),
+                    color: const Color.fromARGB(255, 78, 84, 94),
                     child: const Text(
                       'ขนาดสินค้า',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Kanit', // ใช้ฟอนต์ Kanit
-                      ),
+                          color: Colors.white,
+                          fontFamily: 'Kanit'), // ใช้ฟอนต์ Kanit
+                      textAlign: TextAlign.center, // จัดกึ่งกลางข้อความ
+                    ),
+                  ),
+                ),
+
+                // ขนาดสินค้า (ซ่อนอยู่)
+                Visibility(
+                  visible:
+                      _isSpecificationsVisible, // ใช้ตัวแปรเพื่อควบคุมการแสดง
+                  child: Container(
+                    width: double.infinity, // ทำให้กว้างเท่ากับปุ่ม
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.2), // สีพื้นหลังที่จางๆ
+                      borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'น้ำหนัก: ${widget.sh_weight} kg',
+                          style: const TextStyle(
+                              fontFamily: 'Kanit'), // ใช้ฟอนต์ Kanit
+                        ), // แสดงน้ำหนัก
+                        Text(
+                          'ยาว: ${widget.sh_length} cm',
+                          style: const TextStyle(
+                              fontFamily: 'Kanit'), // ใช้ฟอนต์ Kanit
+                        ), // แสดงความยาว
+                        Text(
+                          'กว้าง: ${widget.sh_width} cm',
+                          style: const TextStyle(
+                              fontFamily: 'Kanit'), // ใช้ฟอนต์ Kanit
+                        ), // แสดงความกว้าง
+                        Text(
+                          'สูง: ${widget.sh_height} cm',
+                          style: const TextStyle(
+                              fontFamily: 'Kanit'), // ใช้ฟอนต์ Kanit
+                        ), // แสดงความสูง
+                      ],
                     ),
                   ),
                 ),
