@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class CategoryDetailPage extends StatefulWidget {
@@ -13,16 +15,66 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   bool isGridMode = false;
 
   final List<Map<String, dynamic>> products = [
-    {'name': 'Product 1', 'price': 100.0, 'description': 'THT00001', 'image': 'assets/banner1.jpg'},
-    {'name': 'Product 2', 'price': 150.0, 'description': 'THT00002', 'image': 'assets/banner2.jpg'},
-    {'name': 'Product 3', 'price': 200.0, 'description': 'THT00003', 'image': 'assets/banner3.jpg'},
-    {'name': 'Product 4', 'price': 250.0, 'description': 'THT00004', 'image': 'assets/banner4.jpg'},
-    {'name': 'Product 5', 'price': 300.0, 'description': 'THT00005', 'image': 'assets/banner5.jpg'},
-    {'name': 'Product 6', 'price': 350.0, 'description': 'THT00006', 'image': 'assets/banner6.jpg'},
-    {'name': 'Product 7', 'price': 400.0, 'description': 'THT00007', 'image': 'assets/banner7.jpg'},
-    {'name': 'Product 8', 'price': 450.0, 'description': 'THT00008', 'image': 'assets/banner8.jpg'},
-    {'name': 'Product 9', 'price': 500.0, 'description': 'THT00009', 'image': 'assets/banner9.jpg'},
-    {'name': 'Product 10', 'price': 550.0, 'description': 'THT00010', 'image': 'assets/banner10.jpg'},
+    {
+      'name': 'Product 1',
+      'price': 100.0,
+      'description': 'THT00001',
+      'image': 'assets/banner1.jpg'
+    },
+    {
+      'name': 'Product 2',
+      'price': 150.0,
+      'description': 'THT00002',
+      'image': 'assets/banner2.jpg'
+    },
+    {
+      'name': 'Product 3',
+      'price': 200.0,
+      'description': 'THT00003',
+      'image': 'assets/banner3.jpg'
+    },
+    {
+      'name': 'Product 4',
+      'price': 250.0,
+      'description': 'THT00004',
+      'image': 'assets/banner4.jpg'
+    },
+    {
+      'name': 'Product 5',
+      'price': 300.0,
+      'description': 'THT00005',
+      'image': 'assets/banner5.jpg'
+    },
+    {
+      'name': 'Product 6',
+      'price': 350.0,
+      'description': 'THT00006',
+      'image': 'assets/banner6.jpg'
+    },
+    {
+      'name': 'Product 7',
+      'price': 400.0,
+      'description': 'THT00007',
+      'image': 'assets/banner7.jpg'
+    },
+    {
+      'name': 'Product 8',
+      'price': 450.0,
+      'description': 'THT00008',
+      'image': 'assets/banner8.jpg'
+    },
+    {
+      'name': 'Product 9',
+      'price': 500.0,
+      'description': 'THT00009',
+      'image': 'assets/banner9.jpg'
+    },
+    {
+      'name': 'Product 10',
+      'price': 550.0,
+      'description': 'THT00010',
+      'image': 'assets/banner10.jpg'
+    },
   ];
 
   @override
@@ -31,7 +83,10 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       appBar: AppBar(
         title: Text(
           '${widget.categoryName} Jadever',
-          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Kanit'), // Apply Kanit font to AppBar title
+          style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontFamily: 'Kanit'), // Apply Kanit font to AppBar title
         ),
         elevation: 4.0,
         centerTitle: true,
@@ -113,7 +168,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                 ),
               ],
             ),
-            trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xff185231)),
+            trailing:
+                const Icon(Icons.arrow_forward_ios, color: Color(0xff185231)),
             onTap: () {
               _showProductDialog(context, product['name']);
             },
@@ -159,7 +215,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   padding: const EdgeInsets.all(1.0),
                   child: Text(
                     product['name'],
-                    style:const TextStyle(
+                    style: const TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Color(0xfff09c1b),
@@ -176,7 +232,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       Expanded(
                         child: Text(
                           product['description'],
-                          style:const TextStyle(
+                          style: const TextStyle(
                             fontSize: 8,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Kanit', // Apply Kanit font
@@ -186,7 +242,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       // ราคาอยู่ทางขวา
                       Text(
                         '\$${product['price'].toStringAsFixed(2)}',
-                        style:const TextStyle(
+                        style: const TextStyle(
                           fontSize: 8,
                           color: Colors.black,
                           fontFamily: 'Kanit', // Apply Kanit font
@@ -217,7 +273,11 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
             children: [
               Text(
                 'พบกันเร็วๆนี้กับ $productName',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Kanit'), // Apply Kanit font
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: 'Kanit'), // Apply Kanit font
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -233,7 +293,10 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                 },
                 child: const Text(
                   'ปิด',
-                  style: TextStyle(fontSize: 18, color: Colors.white, fontFamily: 'Kanit'), // Apply Kanit font
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                      fontFamily: 'Kanit'), // Apply Kanit font
                 ),
               ),
             ],
