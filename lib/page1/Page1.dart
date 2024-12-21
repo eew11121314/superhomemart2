@@ -186,6 +186,8 @@ class _Page1State extends State<Page1> {
     String description = product["description"] ?? "No description available";
     String category = product["category"] ?? "No category available";
     int stock = product["stock"] ?? 0;
+
+    // เช็คค่า null สำหรับรูปภาพ
     String photo_1 = product["photo_1"] ?? "default.jpg";
     String photo_2 = product["photo_2"] ?? "default.jpg";
     String photo_3 = product["photo_3"] ?? "default.jpg";
@@ -262,7 +264,7 @@ class _Page1State extends State<Page1> {
                     hintStyle:
                         TextStyle(color: Colors.black, fontFamily: 'Kanit'),
                   ),
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontFamily: 'Kanit'),
                   cursorColor: Colors.black,
                   onChanged: (value) {
                     _searchProducts(
@@ -383,7 +385,6 @@ class _Page1State extends State<Page1> {
                                     );
                                     break;
                                   default:
-                                    // คุณสามารถจัดการกรณีที่ไม่มี URL ที่ตรงกันได้ที่นี่
                                     print('Unknown image asset: $imageAsset');
                                     break;
                                 }
@@ -398,10 +399,10 @@ class _Page1State extends State<Page1> {
                                       height: 50,
                                     ),
                                     const SizedBox(height: 5),
-                                    // แสดงชื่อแบรนด์
                                     Text(
-                                      product["brand"] ?? '', // แสดงชื่อแบรนด์
-                                      style: TextStyle(fontSize: 12),
+                                      product["brand"] ?? '',
+                                      style: TextStyle(
+                                          fontSize: 12, fontFamily: 'Kanit'),
                                     ),
                                   ],
                                 ),
@@ -411,7 +412,7 @@ class _Page1State extends State<Page1> {
                         ),
                       ),
                 Container(
-                  height: _currentHeight, // ใช้ความสูงปัจจุบัน
+                  height: _currentHeight,
                   padding: const EdgeInsets.all(8.0),
                   child: GridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -442,16 +443,18 @@ class _Page1State extends State<Page1> {
                               const SizedBox(height: 8),
                               Text(
                                 product["name"],
-                                style: const TextStyle(fontSize: 14),
+                                style: const TextStyle(
+                                    fontSize: 14, fontFamily: 'Kanit'),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                '${product["price"]}฿', // แสดงราคาโดยไม่ใช้ $ และใช้เฉพาะ ฿
+                                '${product["price"]}฿',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
+                                  fontFamily: 'Kanit',
                                 ),
                               ),
                             ],

@@ -1,5 +1,3 @@
-// ignore_for_file: library_private_types_in_public_api, sized_box_for_whitespace
-
 import 'package:flutter/material.dart';
 import 'package:superhomemart2/login.dart';
 
@@ -47,10 +45,38 @@ class ProductDetails extends StatefulWidget {
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
+// กำหนดค่าที่ใช้ร่วมกัน ไว้ใช้ปรับกรอบของ
+final double imageSize = 60; // ขนาดของรูปย่อย
+final BoxDecoration imageDecoration = BoxDecoration(
+  border: Border.all(color: Colors.grey, width: 1), // กรอบสีเทา
+  borderRadius: BorderRadius.circular(8), // มุมโค้ง
+  boxShadow: [
+    BoxShadow(
+      color: Colors.grey.withOpacity(0.5), // เงาเบา ๆ
+      spreadRadius: 1,
+      blurRadius: 5,
+      offset: Offset(0, 2), // เงาอยู่ด้านล่าง
+    ),
+  ],
+);
+
 class _ProductDetailsState extends State<ProductDetails> {
   bool _isDetailsVisible = false; // ตัวแปรเพื่อจัดการสถานะการแสดงรายละเอียด
   bool _isSpecificationsVisible =
       false; // ตัวแปรเพื่อจัดการสถานะการแสดงขนาดสินค้า
+  late PageController _pageController; // ประกาศ _pageController
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(); // สร้าง PageController
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose(); // ปล่อย PageController เมื่อไม่ใช้งาน
+    super.dispose();
+  }
 
   // ประกาศฟังก์ชัน _handleOrder
   void _handleOrder(BuildContext context) {
@@ -115,19 +141,329 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    showExpandedImage(context,
-                        "http://superhomemart.duckdns.org:80/upload/${widget.image}");
-                  },
-                  child: Image.network(
-                    "http://superhomemart.duckdns.org:80/upload/${widget.image}",
-                    width: double.infinity, // ทำให้กว้างเต็มที่
-                    height: 400, // กำหนดความสูง
-                    fit: BoxFit.cover, // ใช้ BoxFit.cover เพื่อไม่ให้ตัดขนาดรูป
+                // แสดงรูปใหญ่
+                Container(
+                  padding: const EdgeInsets.all(16.0), // เพิ่ม padding รอบ ๆ
+                  decoration: BoxDecoration(
+                    color: Colors.white, // สีพื้นหลังของ Container
+                    borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2), // เงาเบา ๆ
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // เงาอยู่ด้านล่าง
+                      ),
+                    ],
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      showExpandedImage(context,
+                          "http://superhomemart.duckdns.org:80/upload/${widget.image}");
+                    },
+                    child: Stack(
+                      alignment: Alignment
+                          .bottomRight, // จัดตำแหน่งให้ตัวเลขอยู่มุมล่างขวา
+                      children: [
+                        // ใช้ PageView เพื่อเลื่อนรูปภาพ
+                        Container(
+                          height: 400, // กำหนดความสูง
+                          child: PageView(
+                            controller: _pageController, // ใช้ PageController
+                            physics:
+                                const BouncingScrollPhysics(), // เพิ่มการตั้งค่านี้ที่นี่
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.image}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.image}",
+                                  width: double.infinity, // ทำให้กว้างเต็มที่
+                                  height: 400, // กำหนดความสูง
+                                  fit: BoxFit
+                                      .contain, // ใช้ BoxFit.contain เพื่อไม่ให้ตัดขนาดรูป
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  showExpandedImage(context,
+                                      "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}");
+                                },
+                                child: Image.network(
+                                  "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}",
+                                  width: double.infinity,
+                                  height: 400,
+                                  fit: BoxFit.contain, // ใช้ BoxFit.contain
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // ตัวเลขเล็ก ๆ ที่มุมล่างขวา
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(
+                                137, 131, 129, 129), // พื้นหลังสีดำโปร่งใส
+                            borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                          ),
+                          child: Text(
+                            '1/${widget.photo_6.isNotEmpty ? 6 : 0}', // ตัวเลขที่แสดง
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16, // ขนาดตัวอักษร
+                              fontFamily: 'Kanit', // ใช้ฟอนต์ Kanit
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+
+// เพิ่มระยะห่างระหว่าง Container
+                const SizedBox(height: 16), // ระยะห่างระหว่าง Container
+
+// แสดงรูปย่อย 6 รูป
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // ช่องที่ 1
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_1
+                            .isNotEmpty, // เช็คว่า photo_1 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit
+                                    .cover, // ใช้ BoxFit.cover เพื่อไม่ให้ตัดขนาดรูป
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8), // เว้นช่องระหว่างรูปที่ 1 และ 2
+
+                    // ช่องที่ 2
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_2
+                            .isNotEmpty, // เช็คว่า photo_2 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8), // เว้นช่องระหว่างรูปที่ 2 และ 3
+
+                    // ช่องที่ 3
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_3
+                            .isNotEmpty, // เช็คว่า photo_3 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8), // เว้นช่องระหว่างรูปที่ 3 และ 4
+
+                    // ช่องที่ 4
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_4
+                            .isNotEmpty, // เช็คว่า photo_4 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8), // เว้นช่องระหว่างรูปที่ 4 และ 5
+
+                    // ช่องที่ 5
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_5
+                            .isNotEmpty, // เช็คว่า photo_5 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8), // เว้นช่องระหว่างรูปที่ 5 และ 6
+
+                    // ช่องที่ 6
+                    Expanded(
+                      child: Visibility(
+                        visible: widget.photo_6
+                            .isNotEmpty, // เช็คว่า photo_6 มีข้อมูลหรือไม่
+                        child: GestureDetector(
+                          onTap: () {
+                            showExpandedImage(context,
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}");
+                          },
+                          child: Container(
+                            decoration:
+                                imageDecoration, // ใช้ BoxDecoration ที่กำหนดไว้
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8), // มุมโค้ง
+                              child: Image.network(
+                                "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}",
+                                width: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                height: imageSize, // ใช้ตัวแปรสำหรับขนาด
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+// เพิ่มระยะห่างระหว่าง Container
+
                 const SizedBox(height: 16),
+
                 Text(
                   widget.name,
                   style: const TextStyle(
@@ -251,6 +587,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
 
                 const SizedBox(height: 32),
+
                 ElevatedButton(
                   onPressed: () {
                     // Add product to cart functionality
@@ -287,6 +624,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 // Navigate to support page
               },
             ),
+            const SizedBox(width: 0), // กำหนดระยะห่างที่ต้องการ
             IconButton(
               icon: const Icon(Icons.shopping_cart,
                   size: 30, color: Colors.blueAccent),
@@ -294,18 +632,17 @@ class _ProductDetailsState extends State<ProductDetails> {
                 // Navigate to cart page
               },
             ),
-            // เปลี่ยนจาก IconButton เป็น Container เพื่อเพิ่มพื้นหลังและปรับขนาด
             Container(
               width: 150, // กำหนดความกว้างของปุ่ม
               height: 50, // กำหนดความสูงของปุ่ม
               padding: const EdgeInsets.symmetric(vertical: 0), // ปรับ padding
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 35, 65, 116), // เพิ่มพื้นหลัง
+                color: const Color.fromARGB(255, 37, 60, 99), // เพิ่มพื้นหลัง
                 borderRadius: BorderRadius.circular(0), // ทำให้มุมไม่โค้ง
               ),
               child: TextButton(
                 onPressed: () =>
-                    _handleOrder(context), // เรียกใช้ฟังก์ชันเมื่อกด
+                    _handleOrder(context), // เรียกใช้ฟังก์ชันเมื่อ กด
                 child: const Text(
                   'สั่งซื้อสินค้า',
                   style: TextStyle(
