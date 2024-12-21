@@ -52,6 +52,15 @@ class _ProductDetailsState extends State<ProductDetails> {
   bool _isSpecificationsVisible =
       false; // ตัวแปรเพื่อจัดการสถานะการแสดงขนาดสินค้า
 
+  // ประกาศฟังก์ชัน _handleOrder
+  void _handleOrder(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => LoginPage()), // นำผู้ใช้ไปยังหน้า LoginPage
+    );
+  }
+
   void showExpandedImage(BuildContext context, String imageUrl) {
     Navigator.push(
       context,
@@ -268,7 +277,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween, // เปลี่ยนเป็น spaceBetween
           children: [
             IconButton(
               icon: const Icon(Icons.contact_support,
@@ -284,16 +294,26 @@ class _ProductDetailsState extends State<ProductDetails> {
                 // Navigate to cart page
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.login, size: 30, color: Colors.blueAccent),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          LoginPage()), // Navigate to LoginPage
-                );
-              },
+            // เปลี่ยนจาก IconButton เป็น Container เพื่อเพิ่มพื้นหลังและปรับขนาด
+            Container(
+              width: 150, // กำหนดความกว้างของปุ่ม
+              height: 50, // กำหนดความสูงของปุ่ม
+              padding: const EdgeInsets.symmetric(vertical: 0), // ปรับ padding
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 35, 65, 116), // เพิ่มพื้นหลัง
+                borderRadius: BorderRadius.circular(0), // ทำให้มุมไม่โค้ง
+              ),
+              child: TextButton(
+                onPressed: () =>
+                    _handleOrder(context), // เรียกใช้ฟังก์ชันเมื่อกด
+                child: const Text(
+                  'สั่งซื้อสินค้า',
+                  style: TextStyle(
+                      fontFamily: 'Kanit',
+                      color:
+                          Colors.white), // เปลี่ยนสีข้อความให้เข้ากับพื้นหลัง
+                ),
+              ),
             ),
           ],
         ),

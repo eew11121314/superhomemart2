@@ -194,25 +194,25 @@ class _Page1State extends State<Page1> {
     String photo_6 = product["photo_6"] ?? "default.jpg";
 
     // เพิ่มข้อมูลใหม่
-    double sh_weight = (product["sh_weight"] is int)
+    double shWeight = (product["sh_weight"] is int)
         ? (product["sh_weight"] as int).toDouble()
         : (product["sh_weight"] is String)
             ? double.tryParse(product["sh_weight"]) ?? 0.0
             : product["sh_weight"] ?? 0.0;
 
-    double sh_length = (product["sh_length"] is int)
+    double shLength = (product["sh_length"] is int)
         ? (product["sh_length"] as int).toDouble()
         : (product["sh_length"] is String)
             ? double.tryParse(product["sh_length"]) ?? 0.0
             : product["sh_length"] ?? 0.0;
 
-    double sh_width = (product["sh_width"] is int)
+    double shWidth = (product["sh_width"] is int)
         ? (product["sh_width"] as int).toDouble()
         : (product["sh_width"] is String)
             ? double.tryParse(product["sh_width"]) ?? 0.0
             : product["sh_width"] ?? 0.0;
 
-    double sh_height = (product["sh_height"] is int)
+    double shHeight = (product["sh_height"] is int)
         ? (product["sh_height"] as int).toDouble()
         : (product["sh_height"] is String)
             ? double.tryParse(product["sh_height"]) ?? 0.0
@@ -235,10 +235,10 @@ class _Page1State extends State<Page1> {
           photo_4: photo_4,
           photo_5: photo_5,
           photo_6: photo_6,
-          sh_weight: sh_weight, // เพิ่มข้อมูล sh_weight
-          sh_length: sh_length, // เพิ่มข้อมูล sh_length
-          sh_width: sh_width, // เพิ่มข้อมูล sh_width
-          sh_height: sh_height, // เพิ่มข้อมูล sh_height
+          sh_weight: shWeight, // เพิ่มข้อมูล sh_weight
+          sh_length: shLength, // เพิ่มข้อมูล sh_length
+          sh_width: shWidth, // เพิ่มข้อมูล sh_width
+          sh_height: shHeight, // เพิ่มข้อมูล sh_height
         ),
       ),
     );
