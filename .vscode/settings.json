@@ -1,0 +1,5 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "cmake.sourceDirectory": "C:/superhomemart2/windows"
+    "editor.hover.enabled": false
+}

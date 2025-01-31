@@ -1,0 +1,104 @@
+name: superhomemart2
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.19.0
+  url_launcher: ^6.0.0
+  image_picker: ^1.1.2
+  window_manager: ^0.4.3
+  http: ^0.13.5
+  csv: ^6.0.0
+  crypto: ^3.0.0
+  bcrypt: ^1.1.3
+  connectivity_plus: ^2.3.0
+  flutter_svg: ^1.0.3
+  shared_preferences: ^2.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  fonts:
+    - family: Kanit
+      fonts:
+        - asset: assets/fond/Kanit-Black.ttf
+          weight: 900
+        - asset: assets/fond/Kanit-Bold.ttf
+          weight: 700
+        - asset: assets/fond/Kanit-Regular.ttf
+          weight: 400
+
+  assets:
+    - assets/banner1.jpg
+    - assets/banner2.jpg
+    - assets/banner3.jpg
+    - assets/banner4.jpg
+    - assets/banner5.jpg
+    - assets/banner6.jpg
+    - assets/banner7.jpg
+    - assets/banner8.jpg
+    - assets/banner9.jpg
+    - assets/banner10.jpg
+    - assets/10.10 Shopee.jpg
+    - assets/LAZADA 10.10 KOSANALAND.jpg
+    - assets/LAZADA 10.10 SUPER.jpg
+
+    - assets/brand/DECAKILA@2x.png
+    - assets/brand/JADEVER@2x.png
+    - assets/brand/TOTAL@2x.png
+    - assets/brand/RICOTA_O.png
+
+  
+    - assets/Scooter Courier.gif
+    
+    - assets/1.jpg
+    - assets/Map-01-01.jpg
+
+    - assets/Icon/shopping-cart.svg
+    - assets/Icon/shopping-bag.svg
+    - assets/Icon/left.svg
+    - assets/Icon/user.svg
+    - assets/Icon/settings.svg
+    - assets/Icon/home.svg
+    - assets/Icon/menu.svg
+    - assets/Icon/x.svg
+    - assets/Icon/eyeoff.svg
+    - assets/Icon/eyeon.svg
+    - assets/Icon/wrong.svg
+    - assets/Icon/arrow.svg
+
+    - assets/Icon/lock.svg
+    - assets/Icon/username.svg
+    - assets/Icon/username2.svg
+    - assets/Icon/person.svg
+
+    - assets/Icon/youtube.svg
+    - assets/Icon/tiktok.svg
+    - assets/Icon/line.svg
+    - assets/Icon/facebook.svg
+    - assets/Icon/gmail.svg
+    - assets/Icon/gmail2.svg
+    - assets/Icon/phone.svg
+    - assets/Icon/phone2.svg
+    - assets/Icon/location.svg
+
+    - assets/Icon/add-c.svg
+    - assets/Icon/add-camera.svg
+
+    - assets/Icon/chat.svg
+    - assets/Icon/company.svg
+
+
+    
