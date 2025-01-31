@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
 
 class ForgetPasswordPage extends StatefulWidget {
   const ForgetPasswordPage({super.key});
@@ -22,13 +23,22 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text(
-              'Error',
-              style: TextStyle(fontFamily: 'Kanit'),
-            ),
-            content: const Text(
-              'Please enter a valid email address.',
-              style: TextStyle(fontFamily: 'Kanit'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  'assets/Icon/wrong.svg',
+                  color: Colors.red,
+                  width: 50,
+                  height: 50,
+                ), // ใช้ SVG แทนไอคอน
+                const SizedBox(height: 10),
+                const Text(
+                  'Please enter a valid email address.',
+                  style: TextStyle(fontFamily: 'Kanit'),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
             actions: [
               TextButton(
@@ -67,13 +77,22 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text(
-              'Error',
-              style: TextStyle(fontFamily: 'Kanit'),
-            ),
-            content: const Text(
-              'Please enter a valid 6-digit OTP.',
-              style: TextStyle(fontFamily: 'Kanit'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SvgPicture.asset(
+                  'assets/Icon/wrong.svg',
+                  color: Colors.red,
+                  width: 50,
+                  height: 50,
+                ), // ใช้ SVG แทนไอคอน
+                const SizedBox(height: 10),
+                const Text(
+                  'Please enter a valid 6-digit OTP.',
+                  style: TextStyle(fontFamily: 'Kanit'),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
             actions: [
               TextButton(
@@ -99,6 +118,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/Icon/left.svg',
+            color: Colors.white,
+            width: 24,
+            height: 24,
+          ), // ใช้ SVG แทนไอคอน
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: const Text(
           'Forget Password',
           style: TextStyle(fontFamily: 'Kanit'),
@@ -119,7 +149,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               controller: _emailController,
               decoration: InputDecoration(
                 hintText: 'Your email',
-                prefixIcon: const Icon(Icons.email),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SvgPicture.asset(
+                    'assets/Icon/gmail.svg',
+                    width: 24,
+                    height: 24,
+                  ), // ใช้ SVG แทนไอคอน
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
@@ -165,7 +202,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     maxLength: 6,
                     decoration: InputDecoration(
                       hintText: '6-digit OTP',
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/lock.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),

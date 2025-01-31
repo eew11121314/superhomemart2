@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:superhomemart2/page1/Page1.dart';
-import 'package:superhomemart2/page2/Page2.dart';
-import 'package:superhomemart2/page3/Page3.dart';
-import 'package:superhomemart2/Login.dart';
-import 'package:superhomemart2/page1/delivery.dart';
-import 'package:superhomemart2/page4/editprofile.dart';
+import 'package:superhomemart2/page1_main/page1_m.dart'; // เพิ่มการนำเข้า
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
@@ -29,12 +24,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/delivery': (context) => const DeliveryPage(
-              productName: '',
-            ),
-      },
     );
   }
 }
@@ -50,10 +39,8 @@ class HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const Page1(),
-    const Page2(),
-    const Page3(),
-    const EditProfilePage(),
+    const Page1M(),
+    // เพิ่มหน้าอื่นๆ ที่ต้องการในอนาคต
   ];
 
   void _onItemTapped(int index) {
@@ -67,30 +54,26 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black,
         items: [
           BottomNavigationBarItem(
-            icon:
-                SvgPicture.asset('assets/Icon/home.svg', width: 24, height: 24),
+            icon: SvgPicture.asset('assets/Icon/home.svg', width: 24, height: 24),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon:
-                SvgPicture.asset('assets/Icon/menu.svg', width: 24, height: 24),
+            icon: SvgPicture.asset('assets/Icon/menu.svg', width: 24, height: 24),
             label: 'Menu',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset('assets/Icon/settings.svg',
-                width: 24, height: 24),
+            icon: SvgPicture.asset('assets/Icon/settings.svg', width: 24, height: 24),
             label: 'Settings',
           ),
           BottomNavigationBarItem(
-            icon:
-                SvgPicture.asset('assets/Icon/user.svg', width: 24, height: 24),
+            icon: SvgPicture.asset('assets/Icon/user.svg', width: 24, height: 24),
             label: 'Profile',
           ),
         ],

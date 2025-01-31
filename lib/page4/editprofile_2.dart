@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
 import 'package:shared_preferences/shared_preferences.dart'; // เพิ่มการนำเข้า
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+class EditProfilePage2 extends StatefulWidget {
+  const EditProfilePage2({super.key});
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _EditProfilePageState extends State<EditProfilePage2> {
   final TextEditingController _usernameController =
       TextEditingController(); // เพิ่ม TextEditingController สำหรับ username
   final TextEditingController _passwordController = TextEditingController();
@@ -200,7 +200,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         alignment: Alignment.center,
         child: const Text(
-          'Save Changes',
+          'เข้ามาถูกแล้ว',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

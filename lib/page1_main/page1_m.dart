@@ -2,7 +2,7 @@ import 'dart:async';
 //import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'productdetails.dart';
+import 'productdetails_m.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:superhomemart2/page2/decakila.dart';
@@ -11,14 +11,14 @@ import 'package:superhomemart2/page2/total.dart';
 import 'package:superhomemart2/page2/ricota.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Page1 extends StatefulWidget {
-  const Page1({super.key});
+class Page1M extends StatefulWidget {
+  const Page1M({super.key});
 
   @override
-  _Page1State createState() => _Page1State();
+  Page1MState createState() => Page1MState();
 }
 
-class _Page1State extends State<Page1> {
+class Page1MState extends State<Page1M> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   int _currentPage = 0;
@@ -223,7 +223,7 @@ class _Page1State extends State<Page1> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProductDetails(
+        builder: (context) => ProductDetailsM(
           name: name,
           image: image,
           price: price,
@@ -311,6 +311,17 @@ class _Page1State extends State<Page1> {
               },
             ),
         ],
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            'assets/Icon/person.svg', // ใช้ SVG แทนไอคอนรูปคน
+            width: 50,
+            height: 50,
+            color: const Color.fromARGB(255, 6, 4, 4),
+          ),
+          onPressed: () {
+            // เพิ่มฟังก์ชันการทำงานที่ต้องการเมื่อกดปุ่ม
+          },
+        ),
       ),
       body: Stack(
         children: [

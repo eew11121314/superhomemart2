@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart'; // นำเข้า package สำหรับใช้ TextInputFormatter
+import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  RegisterPageState createState() => RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -44,19 +45,20 @@ class _RegisterPageState extends State<RegisterPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: 50,
-          ),
-          content: Row(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  message,
-                  style: const TextStyle(fontFamily: 'Kanit'),
-                ),
+              SvgPicture.asset(
+                'assets/Icon/wrong.svg',
+                color: Colors.red,
+                width: 50,
+                height: 50,
+              ), // ใช้ SVG แทนไอคอน
+              const SizedBox(height: 10),
+              Text(
+                message,
+                style: const TextStyle(fontFamily: 'Kanit'),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -108,19 +110,19 @@ class _RegisterPageState extends State<RegisterPage> {
         _isLastNameValid &&
         _isPhoneValid &&
         _isAddressValid)) {
-      _showAlert(context, 'Please fill in all fields correctly');
+      _showAlert(context, 'กรุณาเติมให้ครบทุกช่อง');
       return;
     }
 
     if (password != confirmPassword) {
-      _showAlert(context, 'Passwords do not match');
+      _showAlert(context, 'รหัสผ่านไม่ตรงกัน');
       return;
     }
 
     // ส่งข้อมูลไปยัง API
     try {
       var url = Uri.parse(
-          'http://superhomemart.duckdns.org:3333/api/upload/user/member/app');
+          'http://superhomemart.duckdns.org:80/api/upload/user/member/app');
       var response = await http.post(url, body: {
         'fname': firstName,
         'lname': lastName,
@@ -134,18 +136,26 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (response.statusCode == 201) {
         var data = jsonDecode(response.body);
-        if (data['message'] != null) {
-          // ทำสิ่งที่ต้องการเมื่อสมัครสมาชิกสำเร็จ
-          _showAlert(context, 'Registration successful: ${data['message']}');
-          Navigator.pushNamed(context, '/login') as bool?;
+        if (mounted) {
+          if (data['message'] != null && data['message'] != '') {
+            _showAlert(context, 'Registration successful: ${data['message']}');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (route) => false);
+          }
         } else {
-          _showAlert(context, 'Unexpected success response');
+          if (mounted) {
+            _showAlert(context, 'Unexpected success response');
+          }
         }
       } else {
-        _showAlert(context, 'ลงทะเบียนไม่สำเร็จ');
+        if (mounted) {
+          _showAlert(context, 'ลงทะเบียนไม่สำเร็จ');
+        }
       }
     } catch (e) {
-      _showAlert(context, 'An error occurred: $e');
+      if (mounted) {
+        _showAlert(context, 'An error occurred: $e');
+      }
     }
   }
 
@@ -154,7 +164,12 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: SvgPicture.asset(
+            'assets/Icon/left.svg',
+            color: Colors.white,
+            width: 24,
+            height: 24,
+          ), // ใช้ SVG แทนไอคอน
           onPressed: () {
             Navigator.pop(context);
           },
@@ -201,14 +216,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'First Name',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.person, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/username.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isFirstNameValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -218,14 +240,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Last Name',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.person, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/username.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isLastNameValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -240,14 +269,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Phone Number',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.phone, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/phone.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isPhoneValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -257,15 +293,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Username',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon:
-                          const Icon(Icons.account_circle, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/username2.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isUsernameValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -275,14 +317,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Email',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.email, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/gmail.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isEmailValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -293,21 +342,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Password',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/lock.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isPasswordValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                       suffixIcon: IconButton(
-                        icon: Icon(
+                        icon: SvgPicture.asset(
                           _obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                              ? 'assets/Icon/eyeoff.svg'
+                              : 'assets/Icon/eyeon.svg',
                           color: Colors.black,
-                        ),
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {
                           setState(() {
                             _obscurePassword = !_obscurePassword;
@@ -324,21 +382,30 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Confirm Password',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/lock.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isConfirmPasswordValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                       suffixIcon: IconButton(
-                        icon: Icon(
+                        icon: SvgPicture.asset(
                           _obscureConfirmPassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                              ? 'assets/Icon/eyeoff.svg'
+                              : 'assets/Icon/eyeon.svg',
                           color: Colors.black,
-                        ),
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {
                           setState(() {
                             _obscureConfirmPassword = !_obscureConfirmPassword;
@@ -354,15 +421,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       hintText: 'Address',
                       hintStyle: const TextStyle(fontFamily: 'Kanit'),
-                      prefixIcon:
-                          const Icon(Icons.location_on, color: Colors.black),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/location.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
                       fillColor: _isAddressValid
-                          ? Colors.white.withOpacity(0.8)
-                          : Colors.red.withOpacity(0.3),
+                          ? Colors.white.withAlpha((0.8 * 255).toInt())
+                          : Colors.red.withAlpha((0.3 * 255).toInt()),
                     ),
                   ),
                   const SizedBox(height: 20),

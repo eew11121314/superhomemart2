@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
 
 class HelpcenterPage extends StatefulWidget {
   const HelpcenterPage({super.key});
 
   @override
-  _HelpcenterPageState createState() => _HelpcenterPageState();
+  HelpcenterPageState createState() =>
+      HelpcenterPageState(); // เปลี่ยนชื่อคลาสให้เป็น public
 }
 
-class _HelpcenterPageState extends State<HelpcenterPage> {
+class HelpcenterPageState extends State<HelpcenterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +26,7 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
               const SizedBox(height: 20),
               _buildInfoCard(
                 context,
-                icon: Icons.call,
+                icon: 'assets/Icon/company.svg', // เปลี่ยนเป็น SVG
                 title: 'Call us:',
                 content:
                     'Phone: 098 827 6425\nเวลาทำการ: วันจันทร์-เสาร์ 08:30 น. – 17:30 น.',
@@ -38,7 +40,7 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
               const SizedBox(height: 20),
               _buildInfoCard(
                 context,
-                icon: Icons.mark_as_unread_sharp,
+                icon: 'assets/Icon/chat.svg', // เปลี่ยนเป็น SVG
                 title: 'Chat with Us:',
                 content:
                     'Line: @Superhomemart\nLive Chat Operating hours: วันจันทร์-เสาร์ 08:30 น. – 17:30 น.\nAddress: 654/23 ถนนพระรามที่ 4 แขวงมหาพฤฒาราม เขตบางรัก กรุงเทพมหานคร 10500',
@@ -75,7 +77,8 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withAlpha((0.3 * 255)
+                            .toInt()), // แทนที่ withOpacity ด้วย withAlpha
                         offset: const Offset(0, 4),
                         blurRadius: 8,
                       ),
@@ -128,6 +131,17 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
+            leading: IconButton(
+              icon: SvgPicture.asset(
+                'assets/Icon/left.svg',
+                width: 30,
+                height: 30,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ),
       ),
@@ -136,7 +150,7 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
 
   Widget _buildInfoCard(
     BuildContext context, {
-    required IconData icon,
+    required String icon, // เปลี่ยนเป็น String สำหรับ SVG
     required String title,
     required String content,
     TextStyle? titleStyle,
@@ -153,7 +167,10 @@ class _HelpcenterPageState extends State<HelpcenterPage> {
           children: [
             Row(
               children: [
-                Icon(icon, size: 28, color: const Color(0xFF0F44A9)),
+                SvgPicture.asset(icon,
+                    width: 28,
+                    height: 28,
+                    color: const Color(0xFF0F44A9)), // ใช้ SVG
                 const SizedBox(width: 16),
                 Text(
                   title,

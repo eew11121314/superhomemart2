@@ -5,15 +5,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:superhomemart2/ForgetPassword.dart';
 import 'package:superhomemart2/register.dart';
+import 'package:superhomemart2/page1_main/page1_m.dart'; // Update the import
+import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false; // สถานะการแสดงรหัสผ่าน
@@ -21,9 +23,9 @@ class _LoginPageState extends State<LoginPage> {
 
   // ฟังก์ชันดึงข้อมูลผู้ใช้จาก API
   Future<void> fetchUsers() async {
-    final String url =
+    const String url =
         "http://superhomemart.duckdns.org:80/api/user/member/app";
-    final String apiKey = "WHt)m6gpqxkF1r(oDczv8mq%";
+    const String apiKey = "WHt)m6gpqxkF1r(oDczv8mq%";
 
     try {
       final response = await http.get(
@@ -38,12 +40,12 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           users = jsonData;
         });
-        print("Success: $jsonData");
+        debugPrint("Success: $jsonData");
       } else {
-        print("Error: ${response.statusCode}");
+        debugPrint("Error: ${response.statusCode}");
       }
     } catch (e) {
-      print("Exception: $e");
+      debugPrint("Exception: $e");
     }
   }
 
@@ -53,50 +55,26 @@ class _LoginPageState extends State<LoginPage> {
     fetchUsers(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลผู้ใช้เมื่อเปิดหน้า
   }
 
-  // ฟังก์ชันเปรียบเทียบข้อมูลผู้ใช้จาก API กับข้อมูลที่กรอก
-  void _loginUser() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-
-    if (username.isEmpty || password.isEmpty) {
-      _showAlert(context, 'Please fill in all fields');
-    } else {
-      bool userFound = false;
-      for (var user in users) {
-        // เปรียบเทียบรหัสผ่านที่กรอกกับแฮช bcrypt ที่ได้จาก API
-        if (user['username'] == username &&
-            BCrypt.checkpw(password, user['password'])) {
-          userFound = true;
-          break;
-        }
-      }
-
-      if (userFound) {
-        Navigator.pop(context, true);
-      } else {
-        _showAlert(context, 'Invalid username or password');
-      }
-    }
-  }
-
+  // ฟังก์ชันแสดง alert message
   void _showAlert(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          icon: const Icon(
-            Icons.error_outline,
-            color: Colors.red,
-            size: 50,
-          ),
-          content: Row(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  message,
-                  style: const TextStyle(fontFamily: 'Kanit'),
-                ),
+              SvgPicture.asset(
+                'assets/Icon/wrong.svg',
+                color: Colors.red,
+                width: 50,
+                height: 50,
+              ), // ใช้ SVG แทนไอคอน
+              const SizedBox(height: 10),
+              Text(
+                message,
+                style: const TextStyle(fontFamily: 'Kanit'),
+                textAlign: TextAlign.center,
               ),
             ],
           ),
@@ -116,11 +94,42 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  // ฟังก์ชันเปรียบเทียบข้อมูลผู้ใช้จาก API กับข้อมูลที่กรอก
+  void _loginUser() {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    if (username.isEmpty || password.isEmpty) {
+      _showAlert(context, 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      bool userFound = false;
+      for (var user in users) {
+        // เปรียบเทียบรหัสผ่านที่กรอกกับแฮช bcrypt ที่ได้จาก API
+        if (user['username'] == username &&
+            BCrypt.checkpw(password, user['password'])) {
+          userFound = true;
+          break;
+        }
+      }
+
+      if (userFound) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const Page1M()), // Update the navigation
+        );
+      } else {
+        _showAlert(context, 'ใส่ username หรือ password ไม่ถูกต้อง');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+          // พื้นหลังแบบ Gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -130,22 +139,28 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+          // เอฟเฟกต์เบลอ
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(color: Colors.black.withOpacity(0.1)),
             ),
           ),
+          // ปุ่มย้อนกลับ
           Positioned(
             top: 10,
             left: 10,
             child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: SvgPicture.asset(
+                'assets/Icon/left.svg',
+                color: Colors.white,
+              ), // ใช้ SVG แทนไอคอน
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
           ),
+          // เนื้อหาหลัก
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
@@ -166,12 +181,20 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                       hintText: 'Type your username',
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/username.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.8),
+                      fillColor: Colors.white.withAlpha(
+                          (0.8 * 255).toInt()), // เปลี่ยนจาก withOpacity
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -181,14 +204,23 @@ class _LoginPageState extends State<LoginPage> {
                         !_isPasswordVisible, // ใช้ค่า _isPasswordVisible
                     decoration: InputDecoration(
                       hintText: 'Type your password',
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          'assets/Icon/lock.svg',
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
+                      ),
                       suffixIcon: IconButton(
-                        icon: Icon(
+                        icon: SvgPicture.asset(
                           _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                              ? 'assets/Icon/eyeon.svg'
+                              : 'assets/Icon/eyeoff.svg',
                           color: Colors.grey,
-                        ),
+                          width: 24,
+                          height: 24,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {
                           setState(() {
                             _isPasswordVisible =
@@ -200,7 +232,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.8),
+                      fillColor: Colors.white.withAlpha(
+                          (0.8 * 255).toInt()), // เปลี่ยนจาก withOpacity
                     ),
                   ),
                   Align(
@@ -210,11 +243,12 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const ForgetPasswordPage()),
+                            builder: (context) => const ForgetPasswordPage(),
+                          ),
                         );
                       },
                       child: const Text(
-                        'Forgot password?',
+                        'ลืมรหัสผ่าน?',
                         style:
                             TextStyle(color: Colors.white, fontFamily: 'Kanit'),
                       ),
@@ -261,18 +295,27 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.facebook,
-                            color: Colors.white, size: 30),
+                        icon: SvgPicture.asset(
+                          'assets/Icon/facebook.svg',
+                          width: 30,
+                          height: 30,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {},
                       ),
                       IconButton(
-                        icon: const Icon(Icons.apple,
-                            color: Colors.white, size: 32),
+                        icon: SvgPicture.asset(
+                          'assets/Icon/gmail.svg',
+                          width: 30,
+                          height: 30,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {},
                       ),
                       IconButton(
-                        icon: const Icon(Icons.mail_lock,
-                            color: Colors.white, size: 30),
+                        icon: SvgPicture.asset(
+                          'assets/Icon/phone.svg',
+                          width: 30,
+                          height: 30,
+                        ), // ใช้ SVG แทนไอคอน
                         onPressed: () {},
                       ),
                     ],
@@ -282,26 +325,31 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
                       );
                     },
                     child: const Text(
                       'ลงทะเบียน',
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Kanit'),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Kanit',
+                      ),
                     ),
                   ),
                   // แสดงข้อมูลผู้ใช้จาก API
                   if (users.isNotEmpty) ...[
-                    const SizedBox(height: 20),
+                    /* 
+                   const SizedBox(height: 20),
                     const Text(
                       'Users from API',
                       style:
                           TextStyle(color: Colors.white, fontFamily: 'Kanit'),
                     ),
                     const SizedBox(height: 10),
+                    */
                   ],
                 ],
               ),

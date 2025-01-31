@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:superhomemart2/login.dart';
+//import 'package:superhomemart2/login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:superhomemart2/page1_main/order_m.dart';
 
-class ProductDetails extends StatefulWidget {
+class ProductDetailsM extends StatefulWidget {
   final String name;
   final String image;
   final double price;
@@ -21,7 +22,7 @@ class ProductDetails extends StatefulWidget {
   final double sh_width;
   final double sh_height;
 
-  const ProductDetails({
+  const ProductDetailsM({
     super.key,
     required this.name,
     required this.image,
@@ -43,7 +44,7 @@ class ProductDetails extends StatefulWidget {
   });
 
   @override
-  _ProductDetailsState createState() => _ProductDetailsState();
+  _ProductDetailsMState createState() => _ProductDetailsMState();
 }
 
 const double imageSize = 60;
@@ -60,7 +61,7 @@ final BoxDecoration imageDecoration = BoxDecoration(
   ],
 );
 
-class _ProductDetailsState extends State<ProductDetails> {
+class _ProductDetailsMState extends State<ProductDetailsM> {
   bool _isDetailsVisible = false;
   bool _isSpecificationsVisible = false;
   late PageController _pageController;
@@ -82,7 +83,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   void _handleOrder(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
+      MaterialPageRoute(builder: (context) => const OrderPageM()),
     );
   }
 
@@ -682,7 +683,7 @@ class FullScreenImageViewer extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: SvgPicture.asset(
-            'assets/Icon/arrow2.svg', // ใช้ SVG แทนไอคอน
+            'assets/Icon/arrow.svg', // ใช้ SVG แทนไอคอน
             width: 30,
             height: 30,
             color: Colors.white,
@@ -693,6 +694,7 @@ class FullScreenImageViewer extends StatelessWidget {
         ),
       ),
       // ...existing code...
+
       body: Stack(
         children: [
           PageView.builder(
