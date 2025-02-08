@@ -8,10 +8,10 @@ class EditProfilePage2 extends StatefulWidget {
   const EditProfilePage2({super.key});
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _EditProfilePage2State createState() => _EditProfilePage2State();
 }
 
-class _EditProfilePageState extends State<EditProfilePage2> {
+class _EditProfilePage2State extends State<EditProfilePage2> {
   final TextEditingController _usernameController =
       TextEditingController(); // เพิ่ม TextEditingController สำหรับ username
   final TextEditingController _passwordController = TextEditingController();
@@ -53,7 +53,7 @@ class _EditProfilePageState extends State<EditProfilePage2> {
         preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
           title: const Text(
-            'Edit Profile',
+            'My Profile',
             style: TextStyle(
               color: Colors.black,
               fontFamily: 'Kanit',

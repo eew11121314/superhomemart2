@@ -23,6 +23,8 @@ dependencies:
   connectivity_plus: ^2.3.0
   flutter_svg: ^1.0.3
   shared_preferences: ^2.0.6
+  shimmer: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +68,7 @@ flutter:
     - assets/1.jpg
     - assets/Map-01-01.jpg
 
+    - assets/Icon/cart.svg
     - assets/Icon/shopping-cart.svg
     - assets/Icon/shopping-bag.svg
     - assets/Icon/left.svg
@@ -100,5 +103,8 @@ flutter:
     - assets/Icon/chat.svg
     - assets/Icon/company.svg
 
+    - assets/Icon/plus.svg
+    - assets/Icon/minus.svg
+    - assets/Icon/arrow-bottom.svg
 
     

@@ -1,8 +1,8 @@
-import 'dart:async';
+import 'dart:async'; //ไอคอนตะกร้า
 //import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'productdetails_m.dart';
+import 'productdetails1_m.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:superhomemart2/page2/decakila.dart';
@@ -10,6 +10,10 @@ import 'package:superhomemart2/page2/jadever.dart';
 import 'package:superhomemart2/page2/total.dart';
 import 'package:superhomemart2/page2/ricota.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:superhomemart2/page1_main/profile_m.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:superhomemart2/icons/draggable_cart_icon.dart';
+import 'package:superhomemart2/widgetall/tabbar.dart';
 
 class Page1M extends StatefulWidget {
   const Page1M({super.key});
@@ -145,6 +149,11 @@ class Page1MState extends State<Page1M> {
   @override
   void initState() {
     super.initState();
+
+    // ดึงข้อมูลจาก SharedPreferences เมื่อเริ่มต้น
+    _checkLoginStatus();
+
+    // โค้ดที่เหลือของคุณ
     Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       if (_currentPage < _adImages.length - 1) {
         _currentPage++;
@@ -157,6 +166,7 @@ class Page1MState extends State<Page1M> {
         curve: Curves.easeInOut,
       );
     });
+
     fetchUsers();
 
     _scrollController.addListener(() {
@@ -165,6 +175,38 @@ class Page1MState extends State<Page1M> {
         _loadMoreProducts();
       }
     });
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username'); // ดึง username ที่บันทึกไว้
+
+    if (username != null) {
+      // เชื่อมต่อกับ API เพื่อยืนยันว่า username นี้มีข้อมูลอยู่หรือไม่
+      final response = await http.get(
+        Uri.parse('https://superhomemart.duckdns.org/api/user/member/app?'),
+      );
+
+      if (response.statusCode == 200) {
+        // ถ้า API ตอบกลับสำเร็จ
+        var data = json.decode(response.body);
+
+        // ตัวอย่างการใช้ข้อมูลจาก API
+        if (data['status'] == 'success') {
+          // ถ้า username ถูกต้อง
+          print("User $username is already logged in");
+        } else {
+          // ถ้า username ไม่ถูกต้อง
+          print("No such user found in the system.");
+        }
+      } else {
+        // ถ้าการเชื่อมต่อ API ล้มเหลว
+        print("Failed to connect to the API.");
+      }
+    } else {
+      // ผู้ใช้ยังไม่ได้ล็อกอิน
+      print("No user logged in.");
+    }
   }
 
   @override
@@ -319,7 +361,10 @@ class Page1MState extends State<Page1M> {
             color: const Color.fromARGB(255, 6, 4, 4),
           ),
           onPressed: () {
-            // เพิ่มฟังก์ชันการทำงานที่ต้องการเมื่อกดปุ่ม
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           },
         ),
       ),
@@ -335,12 +380,17 @@ class Page1MState extends State<Page1M> {
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: PageView.builder(
                       controller: _pageController,
-                      itemCount: _adImages.length,
+                      itemCount: _adImages
+                          .where((image) => image.isNotEmpty)
+                          .length, // กรองภาพที่ไม่ว่างเปล่า
                       itemBuilder: (context, index) {
+                        String image = _adImages
+                            .where((image) => image.isNotEmpty)
+                            .toList()[index]; // ใช้ภาพที่ไม่ว่างเปล่า
                         return Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(_adImages[index]),
+                              image: AssetImage(image),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -476,7 +526,7 @@ class Page1MState extends State<Page1M> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Image.network(
-                                "http://superhomemart.duckdns.org:80/upload/${product["photo"]}",
+                                "http://superhomemart.duckdns.org:80/upload/${product["photo"]}.jpg",
                                 height: 180,
                                 fit: BoxFit.cover,
                               ),
@@ -507,10 +557,10 @@ class Page1MState extends State<Page1M> {
               ],
             ),
           ),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+
+          // เพิ่ม DraggableCartIcon ที่มุมขวาล่าง
+          DraggableCartIcon(),
+          TabBarWidget(),
         ],
       ),
     );

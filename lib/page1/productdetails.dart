@@ -178,7 +178,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   );
                                 },
                                 child: Image.network(
-                                  "http://superhomemart.duckdns.org:80/upload/$photoUrl",
+                                  "http://superhomemart.duckdns.org:80/upload/$photoUrl.jpg",
                                   width: double.infinity,
                                   height: 400,
                                   fit: BoxFit.contain,
@@ -249,7 +249,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_1}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -294,7 +294,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_2}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -339,7 +339,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_3}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -384,7 +384,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_4}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -429,7 +429,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_5}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -474,7 +474,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8),
                                   child: Image.network(
-                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}",
+                                    "http://superhomemart.duckdns.org:80/upload/${widget.photo_6}.jpg",
                                     width: imageSize,
                                     height: imageSize,
                                     fit: BoxFit.cover,
@@ -596,85 +596,69 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add product to cart functionality
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 206, 211, 218),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 32),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(fontSize: 18, fontFamily: 'Kanit'),
-                  ),
-                ),
               ],
             ),
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: SvgPicture.asset('assets/Icon/menu.svg',
-                  width: 30,
-                  height: 30,
-                  color: Colors.blueAccent), // ใช้ SVG แทนไอคอน
-              onPressed: () {
-                // Navigate to support page
-              },
-            ),
-            const SizedBox(width: 0),
-            IconButton(
-              icon: SvgPicture.asset('assets/Icon/shopping-cart.svg',
-                  width: 30,
-                  height: 30,
-                  color: Colors.blueAccent), // ใช้ SVG แทนไอคอน
-              onPressed: () {
-                // Navigate to cart page
-              },
-            ),
-            Container(
-              width: 150,
-              height: 50,
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 37, 60, 99),
-                borderRadius: BorderRadius.circular(0),
-              ),
-              child: TextButton(
-                onPressed: () => _handleOrder(context),
-                child: const Text(
-                  'สั่งซื้อสินค้า',
-                  style: TextStyle(fontFamily: 'Kanit', color: Colors.white),
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 150,
+                height: 50,
+                padding: const EdgeInsets.symmetric(vertical: 0),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 37, 60, 99),
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                child: TextButton(
+                  onPressed: () => _handleOrder(context),
+                  child: const Text(
+                    'สั่งซื้อสินค้า',
+                    style: TextStyle(fontFamily: 'Kanit', color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          )),
     );
   }
 }
 
-class FullScreenImageViewer extends StatelessWidget {
+class FullScreenImageViewer extends StatefulWidget {
   final List<String?> photos;
   final int initialIndex;
 
-  const FullScreenImageViewer(
-      {super.key, required this.photos, required this.initialIndex});
+  const FullScreenImageViewer({
+    super.key,
+    required this.photos,
+    required this.initialIndex,
+  });
+
+  @override
+  _FullScreenImageViewerState createState() => _FullScreenImageViewerState();
+}
+
+class _FullScreenImageViewerState extends State<FullScreenImageViewer> {
+  late PageController pageController;
+  int currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: widget.initialIndex);
+    currentPage = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
-    PageController pageController = PageController(initialPage: initialIndex);
+    // กรองรายการรูปภาพที่เป็น null หรือช่องว่าง
+    List<String?> validPhotos = widget.photos
+        .where((photo) => photo != null && photo.isNotEmpty)
+        .toList();
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -682,7 +666,7 @@ class FullScreenImageViewer extends StatelessWidget {
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: SvgPicture.asset(
-            'assets/Icon/arrow2.svg', // ใช้ SVG แทนไอคอน
+            'assets/Icon/arrow.svg', // ใช้ SVG แทนไอคอน
             width: 30,
             height: 30,
             color: Colors.white,
@@ -692,17 +676,21 @@ class FullScreenImageViewer extends StatelessWidget {
           },
         ),
       ),
-      // ...existing code...
       body: Stack(
         children: [
           PageView.builder(
-            itemCount: photos.length,
+            itemCount: validPhotos.length,
             controller: pageController,
+            onPageChanged: (index) {
+              setState(() {
+                currentPage = index;
+              });
+            },
             itemBuilder: (context, index) {
               return Center(
-                child: photos[index] != null
+                child: validPhotos[index] != null
                     ? Image.network(
-                        "http://superhomemart.duckdns.org:80/upload/${photos[index]}",
+                        "http://superhomemart.duckdns.org:80/upload/${validPhotos[index]}.jpg",
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
                           return Image.network(
@@ -714,6 +702,32 @@ class FullScreenImageViewer extends StatelessWidget {
                     : Container(),
               );
             },
+          ),
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                validPhotos.length,
+                (dotIndex) => GestureDetector(
+                  onTap: () {
+                    pageController.jumpToPage(dotIndex);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    width: 12.0,
+                    height: 12.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          currentPage == dotIndex ? Colors.blue : Colors.grey,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

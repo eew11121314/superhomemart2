@@ -1,27 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:flutter_svg/flutter_svg.dart'; // เพิ่มการนำเข้า
-import 'package:shared_preferences/shared_preferences.dart'; // เพิ่มการนำเข้า
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:superhomemart2/page4/editprofile_2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  EditProfilePageState createState() => EditProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
-  final TextEditingController _usernameController =
-      TextEditingController(); // เพิ่ม TextEditingController สำหรับ username
+class EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscurePassword = true; // เพิ่มตัวแปรเพื่อควบคุมการมองรหัสผ่าน
+  bool _obscurePassword = true;
   File? _profileImage;
+  String? _username; // เก็บชื่อผู้ใช้จาก API
 
   @override
   void initState() {
     super.initState();
     _loadProfileImage();
+    fetchUsers(); // ดึงข้อมูลผู้ใช้จาก API เมื่อเปิดหน้า
+  }
+
+  Future<void> fetchUsers() async {
+    const String url =
+        "http://superhomemart.duckdns.org:80/api/user/member/app";
+    const String apiKey = "WHt)m6gpqxkF1r(oDczv8mq%";
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Authorization": "Bearer $apiKey", // ถ้าต้องการ Auth
+          "Content-Type": "application/json"
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // สมมติว่า API ส่งคืนข้อมูลแบบนี้
+        // {"username": "JohnDoe", "email": "john@example.com"}
+        setState(() {
+          _username = data['username'];
+          _usernameController.text = _username ?? "";
+        });
+      } else {
+        print("Error: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error fetching users: $e");
+    }
   }
 
   Future<void> _loadProfileImage() async {
@@ -88,11 +123,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ),
             const SizedBox(height: 14),
-            _buildTextField(_usernameController, 'Username',
-                false), // เพิ่มช่องใส่ username
+            _buildTextField(_usernameController, 'Username', false),
             const SizedBox(height: 14),
-            _buildPasswordField(_passwordController,
-                'New password'), // เพิ่มช่องใส่ password พร้อมฟีเจอร์เปิดปิดการมองรหัสผ่าน
+            _buildPasswordField(_passwordController, 'New password'),
             const SizedBox(height: 24),
             _buildGradientButton(),
           ],
@@ -112,9 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           controller: controller,
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: const TextStyle(
-              fontFamily: 'Kanit',
-            ),
+            labelStyle: const TextStyle(fontFamily: 'Kanit'),
           ),
           obscureText: obscure,
           style: const TextStyle(fontFamily: 'Kanit'),
@@ -133,9 +164,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           controller: controller,
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: const TextStyle(
-              fontFamily: 'Kanit',
-            ),
+            labelStyle: const TextStyle(fontFamily: 'Kanit'),
             suffixIcon: IconButton(
               icon: SvgPicture.asset(
                 _obscurePassword
@@ -163,35 +192,58 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return GestureDetector(
       onTap: () {
         String newPassword = _passwordController.text;
+        String username = _usernameController.text;
 
-        if (newPassword.isNotEmpty) {
+        if (username.isEmpty || newPassword.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'Profile updated!',
+                'กรุณาใส่ข้อมูลให้ครบถ้วน',
                 style: TextStyle(fontFamily: 'Kanit'),
               ),
+              backgroundColor: Colors.red,
             ),
           );
-          Navigator.pop(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Please fill in all fields',
-                style: TextStyle(fontFamily: 'Kanit'),
-              ),
-            ),
-          );
+          return;
         }
+
+        if (username != "JohnDoe" || newPassword != "123456") {
+          // ตรงนี้ต้องเปลี่ยนให้เช็คจากฐานข้อมูลจริง
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'username หรือ password อาจไม่ถูกต้อง',
+                style: TextStyle(fontFamily: 'Kanit'),
+              ),
+              backgroundColor: Colors.orange,
+            ),
+          );
+          return;
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'เข้าสู่ระบบสำเร็จ!',
+              style: TextStyle(fontFamily: 'Kanit'),
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const EditProfilePage2(),
+            ),
+          );
+        });
       },
       child: Container(
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF073074), // Start color
-              Color(0xFF1a6f96), // End color
-            ],
+            colors: [Color(0xFF073074), Color(0xFF1a6f96)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -200,7 +252,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
         alignment: Alignment.center,
         child: const Text(
-          'Save Changes',
+          'เข้าสู่ระบบ',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

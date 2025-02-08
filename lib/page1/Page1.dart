@@ -465,7 +465,7 @@ class _Page1State extends State<Page1> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Image.network(
-                                "http://superhomemart.duckdns.org:80/upload/${product["photo"]}",
+                                "http://superhomemart.duckdns.org:80/upload/${product["photo"]}.jpg",
                                 height: 180,
                                 fit: BoxFit.cover,
                               ),
